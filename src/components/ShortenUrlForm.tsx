@@ -1,75 +1,54 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { nanoid } from 'nanoid';
-interface UrlRequest {
-    long_url: string;
-    user_id: string;
-}
-interface UrlResponse {
-    short_url: string;
-    long_url: string;
-    user_id: string;
-    short_code: string;
-    created_at: string;
-}
+import DisplayShortedUrl from './DisplayShortedUrl';
+import { UrlResponse } from '../dtos';
 
-function getUserId(): string {
-    let user_id = localStorage.getItem('user_id');
-    if (!user_id) {
-        user_id = nanoid(8);
-        localStorage.setItem('user_id', user_id);
-    }
-    return user_id;
-}
-
-async function fetchShortenedUrl(req: UrlRequest): Promise<UrlResponse> {
-    const response = await fetch('http://localhost:3003/create', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(req),
-    });
-    const data: UrlResponse = await response.json();
-    return data;
-}
-
-const ShortenUrlForm = () => {
+const ShortenUrlForm: React.FC = () => {
     const [longUrl, setLongUrl] = useState('');
-    const [shortenedUrl, setShortenedUrl] = useState('');
+    const [urlResponse, setUrlResponse] = useState<UrlResponse | null>(null);
 
-    const handleSubmit = async (event: { preventDefault: () => void; }) => {
-        event.preventDefault();
-        setShortenedUrl('');
-
-        let user_id = getUserId();
-        let req: UrlRequest = {
-            long_url: longUrl,
-            user_id,
-        };
-
-        const data = await fetchShortenedUrl(req);
-        setShortenedUrl(data.short_url);
+    const getUserId = () => {
+        let userId = localStorage.getItem('user_id');
+        if (!userId) {
+            userId = nanoid(8);
+            localStorage.setItem('user_id', userId);
+        }
+        return userId;
     }
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        let userId = getUserId();
+        event.preventDefault();
+        const response = await fetch('http://localhost:3003/create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ longUrl, userId }),
+        });
+
+        if (response.ok) {
+            const data: UrlResponse = await response.json();
+            setUrlResponse(data);
+            setLongUrl('');
+        } else {
+            console.error('Failed to shorten URL');
+        }
+    };
 
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="longUrl">Enter URL to shorten:</label>
+                <label htmlFor="longUrl" className="visually-hidden">Enter URL to shorten:</label>
                 <input
                     type="url"
                     id="longUrl"
                     value={longUrl}
                     onChange={(e) => setLongUrl(e.target.value)}
-                    placeholder="https://example.com/long/url"
+                    placeholder="https://example.com/looong/url"
                     required
                 />
-                <button type="submit">Shorten</button>
+                <button type="submit">Short it!</button>
             </form>
-            {shortenedUrl &&
-                <div>
-                    <a href={shortenedUrl} target="_blank" rel="noopener noreferrer">{shortenedUrl}
-                    </a>
-                </div>}
+            {urlResponse && <DisplayShortedUrl urlResponse={urlResponse} />}
         </div>
     );
 };

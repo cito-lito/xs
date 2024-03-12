@@ -1,11 +1,15 @@
 import './App.css'
+import Footer from './components/Footer'
+import Header from './components/Header'
 import ShortenUrlForm from './components/ShortenUrlForm'
+import UserShortenedURLs from './components/UserShortenedURLs'
 function App() {
   return (
     <>
-      <h1>URL XS</h1>
+      <Header />
       <ShortenUrlForm />
-
+      <UserShortenedURLs />
+      <Footer />
     </>
   )
 }
