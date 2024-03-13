@@ -1,13 +1,12 @@
 import React from 'react';
+import './../index.css'; 
 
 const Header: React.FC = () => {
   return (
-    <header className="header">
-      <div className="container mx-auto px-4">
+    <header>
         <nav className="nav-links">
-          <a href="/" className="text-white py-2 px-4 hover:text-gray-300">Home</a>
+          <a href="/" >URL-XS</a>
         </nav>
-      </div>
     </header>
   );
 };

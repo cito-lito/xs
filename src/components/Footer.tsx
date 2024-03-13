@@ -1,16 +1,16 @@
 import React from 'react';
+import './../index.css';
 
 const Footer: React.FC = () => {
-    const year = new Date().getFullYear(); // Dynamic year for copyright notice
-
+    const year = new Date().getFullYear();
     return (
-        <footer className="footer">
-            <div className="container mx-auto px-4 py-4">
-                <p className="text-white text-center">
-                    © {year} url-xs.
+        <footer>
+            <div>
+                <p>
+                    {year} url-xs -- <></>
+                    <a href="https://github.com/cito-lito/url-xs"
+                        target="_blank" rel="noopener noreferrer">Github</a>
                 </p>
-                {/* You can add additional footer content here like links or social media icons */}
-                <a href="https://github.com/cito-lito/url-xs" className="text-white py-2 px-4 hover:text-gray-300" target="_blank"  >Github</a>
             </div>
         </footer>
     );

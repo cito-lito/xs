@@ -12,19 +12,17 @@ const fetchUserUrls = async (userId: string, page: number): Promise<UserUrlsResp
 
 const UserShortenedURLs: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
-    const [fetchUrls, setFetchUrls] = useState(false); // State to control when to fetch URLs
+    const [fetchUrls, setFetchUrls] = useState(false);
     const userId = localStorage.getItem('user_id');
 
     const { data, isLoading, isError, error } = useQuery(
-        ['userUrls', userId, currentPage], 
+        ['userUrls', userId, currentPage],
         () => fetchUserUrls(userId!, currentPage), {
-            keepPreviousData: true,
-            enabled: fetchUrls && !!userId,
+        keepPreviousData: true,
+        enabled: fetchUrls && !!userId,
     });
 
-    // if (!userId) return <div>Please shorten a URL to see your URLs.</div>;
-
-    const handleFetchUrlsClick = () => setFetchUrls(true); // Handler to set fetchUrls to true when "My URLs" button is clicked
+    const handleFetchUrlsClick = () => setFetchUrls(true);
 
     if (isLoading) return <div>Loading...</div>;
     if (isError) return <div>Error: {error instanceof Error ? error.message : 'An error occurred'}</div>;

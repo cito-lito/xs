@@ -4,7 +4,6 @@ import DisplayShortedUrl from './DisplayShortedUrl';
 import { nanoid } from 'nanoid';
 import { UrlRequest, UrlResponse } from '../dtos';
 
-
 const ShortenUrlForm: React.FC = () => {
     const [longUrl, setLongUrl] = useState('');
 

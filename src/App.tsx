@@ -4,18 +4,22 @@ import Footer from './components/Footer'
 import Header from './components/Header'
 import ShortenUrlForm from './components/ShortenUrlForm'
 import UserShortenedURLs from './components/UserShortenedURLs'
-import './App.css'
+import './index.css'
 
 const queryClient = new QueryClient()
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
+    <div id="root" >
+      <QueryClientProvider client={queryClient}>
         <Header />
-        <ShortenUrlForm />
-        <UserShortenedURLs />
+        <div className="main-content">
+          <ShortenUrlForm />
+          <UserShortenedURLs />
+        </div>
         <Footer />
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </div >
   )
 }
 
