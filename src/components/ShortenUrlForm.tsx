@@ -1,37 +1,34 @@
 import React, { useState } from 'react';
-import { nanoid } from 'nanoid';
+import { useMutation } from 'react-query';
 import DisplayShortedUrl from './DisplayShortedUrl';
-import { UrlResponse } from '../dtos';
+import { nanoid } from 'nanoid';
+import { UrlRequest, UrlResponse } from '../dtos';
 
 const ShortenUrlForm: React.FC = () => {
     const [longUrl, setLongUrl] = useState('');
-    const [urlResponse, setUrlResponse] = useState<UrlResponse | null>(null);
 
-    const getUserId = () => {
-        let userId = localStorage.getItem('user_id');
-        if (!userId) {
-            userId = nanoid(8);
-            localStorage.setItem('user_id', userId);
-        }
-        return userId;
-    }
-
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        let userId = getUserId();
-        event.preventDefault();
+    const shortenUrlMutation = useMutation(async (urlData: UrlRequest): Promise<UrlResponse> => {
         const response = await fetch('http://localhost:3003/create', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ longUrl, userId }),
+            body: JSON.stringify(urlData),
         });
-
-        if (response.ok) {
-            const data: UrlResponse = await response.json();
-            setUrlResponse(data);
-            setLongUrl('');
-        } else {
-            console.error('Failed to shorten URL');
+        if (!response.ok) {
+            throw new Error('Failed to shorten URL');
         }
+        return response.json();
+    });
+
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const userId = localStorage.getItem('user_id') || nanoid(8);
+        // new user
+        if (!localStorage.getItem('user_id')) {
+            localStorage.setItem('user_id', userId);
+        }
+        shortenUrlMutation.mutate({ longUrl, userId }, {
+            onSuccess: () => setLongUrl(''),
+        });
     };
 
     return (
@@ -41,14 +38,22 @@ const ShortenUrlForm: React.FC = () => {
                 <input
                     type="url"
                     id="longUrl"
+                    name="longUrl"
                     value={longUrl}
                     onChange={(e) => setLongUrl(e.target.value)}
                     placeholder="https://example.com/looong/url"
                     required
                 />
-                <button type="submit">Short it!</button>
+                <button type="submit" disabled={shortenUrlMutation.isLoading}>Short it!</button>
             </form>
-            {urlResponse && <DisplayShortedUrl urlResponse={urlResponse} />}
+
+            {shortenUrlMutation.isSuccess && shortenUrlMutation.data && (
+                <DisplayShortedUrl urlResponse={shortenUrlMutation.data} />
+            )}
+
+            {shortenUrlMutation.isError && (
+                <div>Error: {shortenUrlMutation.error instanceof Error ? shortenUrlMutation.error.message : 'An error occurred'}</div>
+            )}
         </div>
     );
 };
