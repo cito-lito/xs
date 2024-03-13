@@ -19,10 +19,8 @@ export interface PaginationMetadata {
   pageSize: number;
 }
 
-export interface UrlResponse {
-  shortUrl: string;
+export interface UrlRequest {
   longUrl: string;
   userId: string;
-  shortCode: string;
-  createdAt: string;
 }
+
