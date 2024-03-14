@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
+import DisplayShortedUrl from './DisplayShortedUrl';
 import { UserUrlsResponse } from '../dtos';
 
 const fetchUserUrls = async (userId: string, page: number): Promise<UserUrlsResponse> => {
@@ -26,27 +27,31 @@ const UserShortenedURLs: React.FC = () => {
 
     if (isLoading) return <div>Loading...</div>;
     if (isError) return <div>Error: {error instanceof Error ? error.message : 'An error occurred'}</div>;
-    if (!data || data.urls.length === 0) return <button onClick={handleFetchUrlsClick}>My URLs</button>;
-
     return (
         <div>
-            <h3>My URLs</h3>
-            <ul>
-                {data.urls.map(url => (
-                    <li key={url.shortCode}>
-                        <a href={url.shortUrl} target="_blank" rel="noopener noreferrer">{url.shortUrl}</a>
-                        (<a href={url.longUrl} target="_blank" rel="noopener noreferrer">{url.longUrl}</a>)
-                    </li>
-                ))}
-            </ul>
-            <div>
-                {data.pagination.currentPage > 1 && (
-                    <button onClick={() => setCurrentPage(page => page - 1)}>Previous</button>
-                )}
-                {data.pagination.currentPage < data.pagination.totalPages && (
-                    <button onClick={() => setCurrentPage(page => page + 1)}>Next</button>
-                )}
-            </div>
+            {(!data || data.urls.length === 0) && (
+                <div className="center-container">
+                    <button onClick={handleFetchUrlsClick} className="fetch-urls-button">My URLs</button>
+                </div>
+            )}
+
+            {data && data.urls.length > 0 && (
+                <>
+                    <ul>
+                        {data.urls.map((url) => (
+                            <DisplayShortedUrl key={url.shortCode} urlResponse={url} />
+                        ))}
+                    </ul>
+                    <div className="pagination">
+                        {data.pagination.currentPage > 1 && (
+                            <button onClick={() => setCurrentPage((page) => page - 1)}>Previous</button>
+                        )}
+                        {data.pagination.currentPage < data.pagination.totalPages && (
+                            <button onClick={() => setCurrentPage((page) => page + 1)}>Next</button>
+                        )}
+                    </div>
+                </>
+            )}
         </div>
     );
 };

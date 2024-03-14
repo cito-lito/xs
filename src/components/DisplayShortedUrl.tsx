@@ -6,16 +6,25 @@ interface Props {
 }
 
 const DisplayShortedUrl: React.FC<Props> = ({ urlResponse }) => {
+    const copyToClipboard = (text: string) => {
+        navigator.clipboard.writeText(text).then(() => {
+        }).catch(err => console.error('Failed to copy text: ', err));
+    };
     return (
-        <div>
-            <p>original URL:</p>
-            <a href={urlResponse.longUrl} target="_blank" rel="noopener noreferrer">
-                {urlResponse.longUrl}
-            </a>
-            <p>shortened URL:</p>
-            <a href={urlResponse.shortUrl} target="_blank" rel="noopener noreferrer">
-                {urlResponse.shortUrl}
-            </a>
+        <div className='url-item'>
+            <div>
+                <a href={urlResponse.longUrl} target="_blank" rel="noopener noreferrer" title={urlResponse.longUrl}>
+                    {urlResponse.longUrl}
+                </a>
+            </div>
+            <div>
+                <a href={urlResponse.shortUrl} target="_blank" rel="noopener noreferrer" title={urlResponse.shortUrl}>
+                    {urlResponse.shortUrl}
+                </a>
+                <button onClick={() => copyToClipboard(urlResponse.shortUrl)} className="copy-button">
+                    copy
+                </button>
+            </div>
         </div>
     );
 };

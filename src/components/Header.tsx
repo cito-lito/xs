@@ -1,12 +1,12 @@
 import React from 'react';
-import './../index.css'; 
+import './../index.css';
 
 const Header: React.FC = () => {
   return (
     <header>
-        <nav className="nav-links">
-          <a href="/" >URL-XS</a>
-        </nav>
+      <nav className="nav-links">
+        <a href="/" className='header-title' >URL-XS</a>
+      </nav>
     </header>
   );
 };

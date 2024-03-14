@@ -32,9 +32,9 @@ const ShortenUrlForm: React.FC = () => {
     };
 
     return (
-        <div>
+        <div className="form-container">
             <form onSubmit={handleSubmit}>
-                <label htmlFor="longUrl" className="visually-hidden">Enter URL to shorten:</label>
+                <label htmlFor="longUrl">Enter URL to shorten:</label>
                 <input
                     type="url"
                     id="longUrl"
@@ -44,15 +44,15 @@ const ShortenUrlForm: React.FC = () => {
                     placeholder="https://example.com/looong/url"
                     required
                 />
-                <button type="submit" disabled={shortenUrlMutation.isLoading}>Short it!</button>
+                <button type="submit" disabled={shortenUrlMutation.isLoading}>SHORTEN</button>
             </form>
-
+            {shortenUrlMutation.isError && (
+                <div className="error-message">
+                    Error: {shortenUrlMutation.error instanceof Error ? shortenUrlMutation.error.message : 'An error occurred'}
+                </div>
+            )}
             {shortenUrlMutation.isSuccess && shortenUrlMutation.data && (
                 <DisplayShortedUrl urlResponse={shortenUrlMutation.data} />
-            )}
-
-            {shortenUrlMutation.isError && (
-                <div>Error: {shortenUrlMutation.error instanceof Error ? shortenUrlMutation.error.message : 'An error occurred'}</div>
             )}
         </div>
     );
