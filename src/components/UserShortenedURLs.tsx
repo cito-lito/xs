@@ -3,6 +3,7 @@ import { useQuery } from 'react-query';
 import DisplayShortedUrl from './DisplayShortedUrl';
 import { UserUrlsResponse } from '../dtos';
 
+
 const fetchUserUrls = async (userId: string, page: number): Promise<UserUrlsResponse> => {
     const response = await fetch(`http://localhost:3003/user/${userId}/urls?offset=${page}`);
     if (!response.ok) {
@@ -13,33 +14,33 @@ const fetchUserUrls = async (userId: string, page: number): Promise<UserUrlsResp
 
 const UserShortenedURLs: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
-    const [fetchUrls, setFetchUrls] = useState(false);
+    const [showUrls, setShowUrls] = useState(false);
     const userId = localStorage.getItem('user_id');
+    console.log('userId', userId);
 
     const { data, isLoading, isError, error } = useQuery(
         ['userUrls', userId, currentPage],
-        () => fetchUserUrls(userId!, currentPage), {
+        () => fetchUserUrls(userId as string, currentPage), {
         keepPreviousData: true,
-        enabled: fetchUrls && !!userId,
+        enabled: !!userId,
+        refetchOnWindowFocus: false,
+        staleTime: Infinity,
     });
-
-    const handleFetchUrlsClick = () => setFetchUrls(true);
-
-    if (isLoading) return <div>Loading...</div>;
-    if (isError) return <div>Error: {error instanceof Error ? error.message : 'An error occurred'}</div>;
+    const handleFetchUrlsClick = () => setShowUrls(!showUrls);
     return (
-        <div>
-            {(!data || data.urls.length === 0) && (
-                <div className="center-container">
-                    <button onClick={handleFetchUrlsClick} className="fetch-urls-button">My URLs</button>
-                </div>
-            )}
+        <div className='urls-container'>
+            <button onClick={handleFetchUrlsClick} className="fetch-urls-button">
+                {showUrls ? 'Hide My URLs' : 'Show My URLs'}
+            </button>
 
-            {data && data.urls.length > 0 && (
+            {isLoading && <div>Loading...</div>}
+            {isError && <div>Error: {error instanceof Error ? error.message : 'An error occurred'}</div>}
+
+            {showUrls && data && data.urls.length > 0 && (
                 <>
                     <ul>
                         {data.urls.map((url) => (
-                            <DisplayShortedUrl key={url.shortCode} urlResponse={url} />
+                            <DisplayShortedUrl urlResponse={url} />
                         ))}
                     </ul>
                     <div className="pagination">

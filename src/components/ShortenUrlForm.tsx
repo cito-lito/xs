@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import DisplayShortedUrl from './DisplayShortedUrl';
 import { nanoid } from 'nanoid';
 import { UrlRequest, UrlResponse } from '../dtos';
 
 const ShortenUrlForm: React.FC = () => {
     const [longUrl, setLongUrl] = useState('');
+    const queryClient = useQueryClient();
 
     const shortenUrlMutation = useMutation(async (urlData: UrlRequest): Promise<UrlResponse> => {
         const response = await fetch('http://localhost:3003/create', {
@@ -26,8 +27,11 @@ const ShortenUrlForm: React.FC = () => {
         if (!localStorage.getItem('user_id')) {
             localStorage.setItem('user_id', userId);
         }
-        shortenUrlMutation.mutate({ longUrl, userId }, {
-            onSuccess: () => setLongUrl(''),
+        shortenUrlMutation.mutateAsync({ longUrl, userId }, {
+            onSuccess: () => {
+                queryClient.invalidateQueries(['userUrls']);
+                setLongUrl('')
+            },
         });
     };
 

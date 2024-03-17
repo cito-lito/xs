@@ -21,5 +21,5 @@ export interface PaginationMetadata {
 
 export interface UrlRequest {
   longUrl: string;
-  userId: string;
+  userId?: string;
 }

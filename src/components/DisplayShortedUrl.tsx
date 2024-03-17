@@ -22,7 +22,7 @@ const DisplayShortedUrl: React.FC<Props> = ({ urlResponse }) => {
                     {urlResponse.shortUrl}
                 </a>
                 <button onClick={() => copyToClipboard(urlResponse.shortUrl)} className="copy-button">
-                    copy
+                    Copy
                 </button>
             </div>
         </div>

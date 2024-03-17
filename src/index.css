@@ -49,10 +49,9 @@ html {
     padding: 2rem;
 }
 
-/* Header, footer */
 header {
     width: 100%;
-    padding: 1rem 5rem;
+    padding: 0.5rem 5rem;
     color: rgba(255, 255, 255, 0.87);
     box-sizing: border-box;
 }
@@ -82,13 +81,13 @@ footer {
 }
 
 
-/*form*/
-.form-container {
+.form-container,
+.urls-contianer {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 1rem;
+    margin-top: 0rem;
 }
 
 form {
@@ -121,7 +120,6 @@ form button[type="submit"] {
     background-color: transparent;
     color: #FFF;
     cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
 form button[type="submit"]:hover {
@@ -136,11 +134,11 @@ form button[type="submit"]:hover {
 
 /**/
 .fetch-urls-button {
-    color: #FFF;
-    background-color: transparent;
-    padding: 10px 20px;
+    padding: 10px;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
+    background-color: transparent;
+    color: #FFF;
     cursor: pointer;
 }
 
@@ -148,31 +146,34 @@ form button[type="submit"]:hover {
     background-color: #9290C3;
 }
 
-.center-container {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
-
 /*display url*/
 .url-item {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     display: block;
     max-width: 90%;
     overflow: hidden;
+    white-space: nowrap;
+    text-align: left;
+}
+
+.url-item a {
+    display: inline-block;
+    max-width: 650px;
+    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    vertical-align: top;
 }
 
 .copy-button {
     font-size: 0.8rem;
-    margin-top: 0.5rem;
+    margin-top: 0.3rem;
     background-color: transparent;
     color: #FFF;
-    padding: 5px 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin-left: 5px;
 }
 
 .copy-button:hover {
@@ -180,6 +181,8 @@ form button[type="submit"]:hover {
 }
 
 .pagination {
+    padding: auto;
+
     display: flex;
     justify-content: center;
     margin-top: 1rem;
@@ -198,4 +201,8 @@ form button[type="submit"]:hover {
 
 .pagination button:hover {
     background-color: #1F2544;
+}
+
+.url-list {
+    padding: 0px 70px;
 }
