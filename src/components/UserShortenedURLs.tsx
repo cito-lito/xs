@@ -2,13 +2,14 @@ import React, { useState } from 'react'
 import { useQuery } from 'react-query'
 import DisplayShortedUrl from './DisplayShortedUrl'
 import { UserUrlsResponse } from '../dtos'
+import { API_URL } from '../api'
 
 const fetchUserUrls = async (
   userId: string,
   page: number
 ): Promise<UserUrlsResponse> => {
   const response = await fetch(
-    `http://localhost:3003/user/${userId}/urls?offset=${page}`
+    `${API_URL}/user/${userId}/urls?offset=${page}`
   )
   if (!response.ok) {
     throw new Error('Failed to fetch URLs')
@@ -20,7 +21,6 @@ const UserShortenedURLs: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [showUrls, setShowUrls] = useState(false)
   const userId = localStorage.getItem('user_id')
-  console.log('userId', userId)
 
   const { data, isLoading, isError, error } = useQuery(
     ['userUrls', userId, currentPage],

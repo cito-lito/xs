@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from 'react-query'
 import DisplayShortedUrl from './DisplayShortedUrl'
 import { nanoid } from 'nanoid'
 import { UrlRequest, UrlResponse } from '../dtos'
+import { API_URL } from '../api';
 
 const ShortenUrlForm: React.FC = () => {
   const [longUrl, setLongUrl] = useState('')
@@ -10,7 +11,7 @@ const ShortenUrlForm: React.FC = () => {
 
   const shortenUrlMutation = useMutation(
     async (urlData: UrlRequest): Promise<UrlResponse> => {
-      const response = await fetch('http://localhost:3003/create', {
+      const response = await fetch(`${API_URL}/create`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(urlData),
