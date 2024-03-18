@@ -10,16 +10,16 @@ const queryClient = new QueryClient()
 
 function App() {
   return (
-    <div id="root" >
+    <div id='root'>
       <QueryClientProvider client={queryClient}>
         <Header />
-        <div className="main-content">
+        <div className='main-content'>
           <ShortenUrlForm />
           <UserShortenedURLs />
         </div>
         <Footer />
       </QueryClientProvider>
-    </div >
+    </div>
   )
 }
 
