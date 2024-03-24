@@ -7,10 +7,13 @@ import { API_URL } from '../api'
 const fetchUserUrls = async (
   userId: string,
   page: number
-): Promise<UserUrlsResponse> => {
+): Promise<UserUrlsResponse | null> => {
   const response = await fetch(
     `${API_URL}/user/${userId}/urls?offset=${page}`
   )
+  if (response.status === 404) {
+    return null
+  }
   if (!response.ok) {
     throw new Error('Failed to fetch URLs')
   }
@@ -44,6 +47,10 @@ const UserShortenedURLs: React.FC = () => {
         <div>
           Error: {error instanceof Error ? error.message : 'An error occurred'}
         </div>
+      )}
+
+      {showUrls && data === null && (
+        <div>You have no URLs yet.</div>
       )}
 
       {showUrls && data && data.urls.length > 0 && (
