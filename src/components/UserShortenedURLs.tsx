@@ -49,7 +49,7 @@ const UserShortenedURLs: React.FC = () => {
         </div>
       )}
 
-      {showUrls && data === null && (
+      {data === null && (
         <div>You have no URLs yet.</div>
       )}
 
