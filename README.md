@@ -7,6 +7,6 @@
 run locally the url shortener service: [check here](https://github.com/cito-lito/url-xs), then:
 
 ```bash
-npm install
-npm run dev
+pnpm install
+pnpm run dev
 ```
