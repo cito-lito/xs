@@ -9,7 +9,7 @@ const fetchUserUrls = async (
   page: number
 ): Promise<UserUrlsResponse | null> => {
   const response = await fetch(
-    `${API_URL}/user/${userId}/urls?offset=${page}`
+    `${API_URL}/api/v1/user/${userId}/urls?offset=${page}`
   )
   if (response.status === 404) {
     return null

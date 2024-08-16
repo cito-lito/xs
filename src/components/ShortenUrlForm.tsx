@@ -11,7 +11,7 @@ const ShortenUrlForm: React.FC = () => {
 
   const shortenUrlMutation = useMutation(
     async (urlData: UrlRequest): Promise<UrlResponse> => {
-      const response = await fetch(`${API_URL}/create`, {
+      const response = await fetch(`${API_URL}/api/v1/url`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(urlData),
